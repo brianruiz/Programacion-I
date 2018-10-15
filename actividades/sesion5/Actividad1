@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+int main (){
+int n1, n2 ;
+
+cout << "Dime un numero: " << endl;
+cin >> n1 ;
+cout << "Dime otro numero: " << endl;
+cin >> n2 ;
+
+if(n1 < n2){
+cout << "Falsoo, no es divisible" << endl;
+return 1;
+}
+else if(n1 >= n2) {
+cout << "Verdadero, el resultado es: " << n1/n2 << endl;
+return 2;
+}
+return 0;
+}
