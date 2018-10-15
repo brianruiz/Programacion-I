@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+int main(){
+unsigned short int a, b;
+
+   cout << "dime un numero: " << endl;
+   cin >> a;
+   cout << "dime un numero:" << endl;
+   cin >> b;
+
+  if (a>b)
+ {
+      cout << "El mayor es: " << a << endl;
+  }else if (a<b){
+      cout << "El mayor es: " << b << endl;
+  }
+}
