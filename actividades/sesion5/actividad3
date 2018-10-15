@@ -1,0 +1,18 @@
+#include <iostream>
+
+using namespace std;
+    float max(float a,float b, float c){
+    if (a < b && c < b){return b;}
+    if (a < c && b < c){return c;}
+    if (b > a && c < a){return a;}};
+
+int main() {
+    float a ,b ,c;
+    cout << "dame un numero: " << endl;
+    cin >> a;
+    cout << "dame un numero: " << endl;
+    cin >> b;
+    cout << "dame un numero: " << endl;
+    cin >> c;
+  cout << "El mayor es: " << max(a, b, c) <<endl;
+}
