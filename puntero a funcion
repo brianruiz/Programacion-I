@@ -1,0 +1,19 @@
+#include <iostream>
+​
+using namespace std;
+​
+double sumar(double a, double b)
+{
+   return a+b;
+}
+​
+int main()
+{
+   double (*ptr_funct)(double,double)=NULL; //Declaramos puntero a función
+   double res=0;
+​
+   ptr_funct=sumar; //inicializamos puntero
+   res=ptr_funct(8.1,8.3);
+   std::cout<<res<<std::endl;
+​
+   retur
