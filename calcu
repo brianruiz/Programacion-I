@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+​
+using namespace std;
+​
+int main()
+{
+   int n=0,num=0,vueltas=4, ind=0;
+   double temp=0;
+   char oper;
+   std::vector<double> vec; //Numeros que vamos a operar
+   std::vector<char> operaciones; //Operaciones que vamos a realizar sobre los números
+   cout << "Cuantos?:" << endl;
+   cin>>n;//Introducimos cuantos numeros vamos a operar
+   for (int i=1;i<=n;i++) {
+       std::cout<<"N_"<<i<<":";
+       std::cin>>num;
+       vec.push_back(num);
+   }
+​
+   for(int i=1;i<n;i++)
+   {
+          std::cout<<"Operacion_"<<i<<":";
+          std::cin>>oper;
+          operaciones.push_back(oper);
+   }
+   while(vueltas>0)
+   {//Usamos la variable vueltas para gestionar la prioridad de las operaciones con un switch-case
+          ind=operaciones.size()-1; //Indice para movernos por el vector de operaciones a realizar
+          while(ind>=0)
+          {//Mientras queden operaciones que resolver seguimos
+              switch(vueltas)
+              {
+                  case 4://buscamos multiplicaciones
+                      if(operaciones.at(ind)=='*')
+                      {
+                          temp=vec.at(ind)*vec.at(ind+1); //Resolvemos operacion
+                          vec.erase(vec.begin()+ind,vec.begin()+ind+2); //eliminamos los operandos que ya hemos operado
+                          vec.insert(vec.begin()+ind,temp); //insertamos el resultaso de la operacion
+                          operaciones.erase(operaciones.begin()+ind); //eliminamos la operacion que hemos hecho
+                      }
+                      break;
+                  case 3://buscamos divisiones
+                      if(operaciones.at(ind)=='/')
+                      {
+                          temp=vec.at(ind)/vec.at(ind+1);
+                          vec.erase(vec.begin()+ind,vec.begin()+ind+2);//eliminamos operandos operados
+                          vec.insert(vec.begin()+ind,temp);//insertamos el resultaso de la operacion
+                          operaciones.erase(operaciones.begin()+ind);//eliminamos operacion
+                      }
+                      break;
+                   case 2://buscamos sumas
+                      if(operaciones.at(ind)=='+')
+                      {
+                          temp=vec.at(ind)+vec.at(ind+1);
+                          vec.erase(vec.begin()+ind,vec.begin()+ind+2);//eliminamos operandos operados
+                          vec.insert(vec.begin()+ind,temp);//insertamos el resultaso de la operacion
+                          operaciones.erase(operaciones.begin()+ind);//eliminamos operacion
+                       }
+                       break;
+                   case 1://buscamos restas
+                       if(operaciones.at(ind)=='-')
+                       {
+                            if(ind==0)
+                            {
+                               temp=vec.at(ind)-vec.at(ind+1);
+                               vec.erase(vec.begin()+ind,vec.begin()+ind+2);//eliminamos operandos operados
+                               vec.insert(vec.begin()+ind,temp);//insertamos el resultaso de la operacion
+                               operaciones.erase(operaciones.begin()+ind);//eliminamos operacion
+                            }
+                            else
+                            {
+                                temp=vec.at(ind)+vec.at(ind+1);
+                                vec.erase(vec.begin()+ind,vec.begin()+ind+2);//eliminamos operandos operados
+                                vec.insert(vec.begin()+ind,temp);//insertamos el resultaso de la operacion
+                                operaciones.erase(operaciones.begin()+ind);//eliminamos operacion
+                                //operaciones.at(ind)='-';
+                            }
+                       }
+                       break;
+                   default:
+                       std::cout<<"Caso no contemplado"<<std::endl;
+                }
+                   ind--;//siguiente vuelta para buscar operaciones
+         }//while(ind>=0)
+      vueltas--;//Hemos terminado la vuelta buscando un operador
+    }//while(vueltas>0)
+​
+std::cout<<"El resultado es:"<<vec[0]<<std::endl;
+return 0;
+}//main
