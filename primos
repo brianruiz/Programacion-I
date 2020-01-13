@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+​
+using namespace std;
+​
+bool chequeo_primo(int a)
+{
+   for (int c=2;c<=a-1;c++)
+   {
+       if(a%c==0)
+       {//no es primo
+           return 0;
+       }
+       else if(c==a)
+       {//es primo
+           return 1;
+       }
+   }
+}
+​
+std::vector<int> NPrimerosPrimos(int n)
+{
+    std::vector<int> n_primos;
+    int contador=1, i=2; //contador=1; porque el 1 siempre va a estar
+                         //i=2;  para que el primer numero que chequeemos sea el 2
+​
+    if(n>0)
+    {
+        n_primos.push_back(1); //El 1 siempre es primo
+​
+        while(contador<n)
+        {
+            if(chequeo_primo(i))
+            {
+                n_primos.push_back(i);
+                contador++;
+            }
+            else {//no es primo
+            }
+            i++; //contador de vueltas->numero para comprobar si es primo
+        }
+    }
+​
+    return n_primos;
+}
+​
+​
+int main()
+{
+   int numero=0;
+   std::vector<int> NOSprimos;
+​
+   std::cout<<"Introduce número de primos a conseguir: ";
+   std::cin>>numero;
+​
+    NOSprimos=NPrimerosPrimos(numero);
+​
+   for(int i:NOSprimos)
+   {
+       std::cout<<i<<"_";
+   }
+       return 1;
+}
