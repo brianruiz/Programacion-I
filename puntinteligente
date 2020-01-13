@@ -1,0 +1,209 @@
+#include <iostream>
+#include <string>
+#include <memory>
+​
+using namespace std;
+​
+struct elemento{
+    std::string nombre;
+    std::shared_ptr<elemento> SiguienteElemento;
+};
+​
+struct IdentificadorLista
+{//Para mayor control es preferible tener identificado el primer y último elemento de la lista y su tamaño
+    std::shared_ptr<elemento> Primero;
+    std::shared_ptr<elemento> Ultimo;
+    int tamano;
+};
+​
+void InsertarNodoEnListaVacia(IdentificadorLista *L, std::string dato)
+{
+    std::shared_ptr<elemento> NodoNuevo(new elemento);
+​
+    NodoNuevo->nombre=dato;
+​
+    NodoNuevo->SiguienteElemento=NULL;
+    L->Primero=NodoNuevo;
+    L->Ultimo=NodoNuevo;
+​
+    L->tamano++;
+}
+​
+void InsertarNodoInicioLista(IdentificadorLista *L, std::string dato)
+{
+    std::shared_ptr<elemento> NodoNuevo(new elemento);
+​
+    NodoNuevo->nombre=dato;
+​
+    NodoNuevo->SiguienteElemento=L->Primero;
+    L->Primero=NodoNuevo;
+    L->tamano++;
+}
+​
+void InsertarNodoFinLista(IdentificadorLista *L, std::string dato)
+{
+    std::shared_ptr<elemento> NodoNuevo(new elemento);
+​
+    NodoNuevo->SiguienteElemento=NULL;
+​
+    NodoNuevo->nombre=dato;
+​
+    L->Ultimo->SiguienteElemento=NodoNuevo;
+​
+    L->Ultimo=NodoNuevo;
+    L->tamano++;
+}
+​
+bool InsertarNodoPosicion(IdentificadorLista *L, std::string dato, int posicion)
+{
+    //Comprobaciones iniciales
+    if(L->tamano<2)
+    {//Tenemos que usar función al Inicio o al fin
+       return 0;
+    }
+​
+    if(posicion <0 || posicion >= L->tamano)
+    {//Fuera de rango de Lista
+        return 0;
+    }
+​
+    std::shared_ptr<elemento> NodoNuevo(new elemento), temporal(new elemento);
+​
+    NodoNuevo->nombre=dato;
+​
+    temporal=L->Primero;
+    for(int i=1;i<posicion;i++)
+    {//Recorremos Lista hasta encontrar Nodo de la posición indicada
+        temporal=temporal->SiguienteElemento;
+    }
+​
+    if(temporal->SiguienteElemento==NULL)
+    {//Si es el ultimo elemento de la lista habría que usar Insertar Nodo al final de la lista
+        return 0;
+    }
+​
+    NodoNuevo->SiguienteElemento=temporal->SiguienteElemento;
+    temporal->SiguienteElemento=NodoNuevo;
+    L->tamano++;
+​
+    return 1;
+}
+​
+bool SuprimirInicioLista(IdentificadorLista *L)
+{
+    if(L->tamano==0)
+    {//No hay nodo que suprimir
+        return 0;
+    }
+​
+    std::shared_ptr<elemento> ASuprimir(new elemento);
+​
+    ASuprimir=L->Primero;
+    L->Primero=L->Primero->SiguienteElemento;
+    if(L->tamano==1)
+    {
+        L->Ultimo=NULL;
+    }
+​
+    //delete ASuprimir; //Liberamos memoria NO HACE FALTA!!!!!!
+    L->tamano--;
+​
+    return 1;
+}
+​
+bool SuprimirNodoPosicion(IdentificadorLista *L,int posicion)
+{
+    if(L->tamano<=1 || posicion < 1 || posicion>=L->tamano)
+    {//Error
+        return 0;
+    }
+​
+    std::shared_ptr<elemento> ASuprimir(new elemento), temporal(new elemento);
+​
+    temporal=L->Primero;
+​
+    for(int i=1;i<posicion;i++)
+    {//Recorremos Lista hasta encontrar Nodo de la posición indicada
+        temporal=temporal->SiguienteElemento;
+    }
+​
+    ASuprimir=temporal->SiguienteElemento;
+    temporal->SiguienteElemento=temporal->SiguienteElemento->SiguienteElemento;
+    if(temporal->SiguienteElemento==NULL)
+    {
+        return 0;
+    }
+​
+    //delete ASuprimir;  //Liberamos memoria NO HACE FALTA!!!!!!
+    L->tamano--;
+​
+    return 1;
+}
+​
+void Destruir(IdentificadorLista *L)
+{
+    while(L->tamano>0)
+    {
+        SuprimirInicioLista(L);
+    }
+}
+​
+void ImprimirLista(IdentificadorLista *L)
+{
+    std::shared_ptr<elemento> temporal(new elemento);
+​
+    temporal=L->Primero;
+    while(temporal!=NULL)
+    {
+        std::cout<<"Direccion nodo: "<< temporal << " Direccion siguiente nodo: "<< temporal->SiguienteElemento <<" Nombre nodo: "<<temporal->nombre<<std::endl;
+        temporal=temporal->SiguienteElemento;
+    }
+    std::cout<<"--Fin--"<<std::endl;
+}
+​
+int main()
+{
+    IdentificadorLista MiLista;
+    std::string Nombre;
+​
+    //Inicializamos la lista
+    MiLista.Primero=NULL;
+    MiLista.Ultimo=NULL;
+    MiLista.tamano=0;
+​
+    
+    //Pruebas
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Nombre="Primero";
+    InsertarNodoEnListaVacia(&MiLista,Nombre);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Nombre="Segundo Primero";
+    InsertarNodoInicioLista(&MiLista,Nombre);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Nombre="Ultimo";
+    InsertarNodoFinLista(&MiLista,Nombre);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Nombre="Segundo Ultimo";
+    InsertarNodoFinLista(&MiLista,Nombre);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Nombre="Otro Nodo";
+    InsertarNodoPosicion(&MiLista,Nombre,3);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    SuprimirInicioLista(&MiLista);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    SuprimirNodoPosicion(&MiLista,2);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    Destruir(&MiLista);
+    ImprimirLista(&MiLista);std::cout<<std::endl;std::cout<<std::endl;
+​
+    cout << "FIN" << endl;
+    return 0;
+}
